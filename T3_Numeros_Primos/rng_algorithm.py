@@ -11,4 +11,4 @@ class RNGAlgorithm(ABC):
         pass
 
     def reset(self):
-        self.__x = self.__seed
+        self.x = self.seed
