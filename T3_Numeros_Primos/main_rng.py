@@ -9,7 +9,7 @@ from inversive_congruential_generator import InversiveCongruentialGenerator
 from blum_blum_shub import BlumBlumShub
 
 
-#Helper function to Blum Blum Shib algortihm
+#Funcao auxiliar para o Blum Blum Shib
 def prev_bbs_usable_prime(x: int) -> int:
         p = sp.prevprime(x)
         while (p % 4 != 3):
@@ -24,16 +24,16 @@ def inversive_congruential_generator_args(n_bits: int) -> tuple[int,int,int,int]
     return (seed, a, b, m)
 
 def blum_blum_shib_args(n_bits: int) -> tuple[int,int]:
-    p = prev_bbs_usable_prime(2**(n_bits//2) - 1) #n_bits//2 because the m cant pass n_bits
+    p = prev_bbs_usable_prime(2**(n_bits//2) - 1) #n_bits//2 para que m nao ultrapasse n_bits
     q = prev_bbs_usable_prime(p)
     m = p*q
     seed = m//2
     return (seed, m)
 
-# Run n_numbers of a RNG Algorithm for each n_bits given. Returns the average time for each length (in milliseconds).
+# Roda n_numbers de um algoritmo RNG para cada n_bits dado. Retorna o tempo médio para cada tamanho (em ms)
 def test_rng_algorithm(rng_algortihm: RNGAlgorithm, args_definer: "function", lengths_bits: list[int], n_numbers: int) -> list[float]:
     times = []
-    print(f"{'N bits':<8} | {'Time (ms)':<15}")
+    print(f"{'N bits':<8} | {'Time (ms)':<15}") # Cria a tabela que é vista no relatório
     print(f"{'-'*8}-|{'-'*15}")
     for n_bits in lengths_bits:
         rng = rng_algortihm(*args_definer(n_bits))
@@ -45,7 +45,7 @@ def test_rng_algorithm(rng_algortihm: RNGAlgorithm, args_definer: "function", le
             sum_time_ns += (end - start)
         avg_time_ms = sum_time_ns / (1e6 * n_numbers)
         times.append(avg_time_ms)
-        print(f"{n_bits:<8} | {avg_time_ms:<10}")
+        print(f"{n_bits:<8} | {avg_time_ms:<10}") # Parte da tabela
 
     return times
 
@@ -62,6 +62,7 @@ if __name__ == "__main__":
     print(f"\nTesting Inversive Congruential Generator for {n_numbers} numbers\n")
     rng_times["Inversive Congruential Generator"] = test_rng_algorithm(InversiveCongruentialGenerator, inversive_congruential_generator_args, lengths, n_numbers)
 
+    # Cria o gráfico que é visto no relatório
     plt.xscale("log")
     plt.xlabel("Number of bits")
     plt.ylabel("Time (ms)")
